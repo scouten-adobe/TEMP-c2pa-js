@@ -20,6 +20,9 @@ jobs:
         fetch-depth: 0
         token: ${{ secrets.GH_ADMIN_COMMIT_TOKEN }}
 
+    # TO DO (Eli?): There appear to be multiple versions active in c2pa-js.
+    # I think we can run this step multiple times for each subproject.
+    # Does that make sense?
     - name: Set new proposed version
       uses: paulhatch/semantic-version@v5.2.1
       id: set-version
@@ -42,11 +45,9 @@ jobs:
         VERSION: ${{ steps.set-version.outputs.version }}
         NIGHTLY_VERSION: ${{ steps.set-nightly-version.outputs.version }}
 
-    - name: Bump crate versions
+    - name: Swap in nightly c2pa-rs build
       run: |
-        sed -i "s/^version = \"[^\"]*\"$/version = \"$VERSION\"/;" sdk/Cargo.toml
-      env:
-        VERSION: ${{ steps.set-nightly-version.outputs.version }}
+        sed -i "s/^c2pa = { version = \"[^\"]*\",/c2pa = { git = \"https:\\/\\/github.com\\/contentauth\\/c2pa-rs.git\", branch = \"nightly\",/;" packages/toolkit/Cargo.toml
     
     - name: Install Rust toolchain
       uses: dtolnay/rust-toolchain@stable
@@ -81,6 +82,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
+        # TO DO (Eli): Do we need to matrix for OS? I'm guessing not.
+        # This is carried over from c2pa-rs's nightly build process.
 
     steps:
       - name: Checkout repository
@@ -88,4 +91,4 @@ jobs:
         with:
           ref: nightly
       
-      # Eli ... help me adapt this for js-sdk
+      # TO DO (Eli): Help me adapt this for js-sdk.
