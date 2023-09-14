@@ -1,8 +1,8 @@
 name: build-test
 on:
-  push:
-    branches:
-      - main
+  # push: TEMPORARY disable in testbed repo
+  #   branches:
+  #     - main
   pull_request:
     types: [opened, synchronize]
 jobs:
