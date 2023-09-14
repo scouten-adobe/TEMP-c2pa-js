@@ -57,7 +57,7 @@ jobs:
     - name: Create or update Cargo.lock
       run: |
         cargo update -w
-        git add -f Cargo.lock
+        git add -f packages/toolkit/Cargo.lock
 
     - name: Report differences for "prepare (release)" commit
       run: git diff
