@@ -56,7 +56,7 @@ jobs:
 
     - name: Create or update Cargo.lock
       run: |
-        cargo update -w
+        cargo update --manifest-path packages/toolkit/Cargo.toml
         git add -f packages/toolkit/Cargo.lock
 
     - name: Report differences for "prepare (release)" commit
